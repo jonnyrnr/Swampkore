@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TilTN Towing and Transport - Phoenix, AZ</title>
+    <meta name="description" content="Live ETA Tracking for towing and transport services in Phoenix, AZ. Family-owned and operated with 20+ years of experience.">
+    <style>
+        /* --- General Styles & Fonts --- */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap');
+
+        :root {
+            --primary-dark: #1A2E40;
+            --primary-accent: #F2A900;
+            --light-bg: #F0F4F7;
+            --text-light: #FFFFFF;
+            --text-dark: #333333;
+            --success-green: #28a745;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--light-bg);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        h3 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--primary-accent);
+            display: inline-block;
+            padding-bottom: 5px;
+        }
+
+        /* --- Header --- */
+        .header {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2rem;
+            font-weight: 900;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            background-color: #fff;
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 10px;
+        }
+
+        .hero .subtitle {
+            font-size: 1.2rem;
+            color: #555;
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: var(--primary-accent);
+            color: var(--primary-dark);
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 700;
+            transition: transform 0.2s, background-color 0.2s;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            background-color: #ffb90f;
+        }
+
+        .phone-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-top: 10px;
+        }
+        
+        /* --- Live Tracking Section --- */
+        .tracker {
+            padding: 60px 0;
+            text-align: center;
+            background-color: #fff;
+        }
+        
+        .tracker-container {
+            max-width: 800px;
+            margin: 0 auto;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .map-placeholder {
+            background-image: url('https://i.imgur.com/gK7F2d1.png'); /* Static map image showing a route */
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            position: relative;
+        }
+        
+        .eta-display {
+            background-color: rgba(26, 46, 64, 0.9);
+            color: white;
+            padding: 15px;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 10px;
+            width: 80%;
+            text-align: center;
+        }
+        
+        .eta-display .eta-time {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin: 0;
+            color: var(--primary-accent);
+        }
+        
+        .eta-display .eta-label {
+            margin: 0;
+            font-size: 1rem;
+        }
+        
+        .status-tracker {
+            padding: 20px;
+        }
+
+        .status-timeline {
+            display: flex;
+            justify-content: space-between;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            text-align: center;
+        }
+        
+        .status-step {
+            flex: 1;
+            position: relative;
+        }
+
+        .status-step::before {
+            content: '';
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            right: -50%;
+            height: 4px;
+            background-color: #ddd;
+            z-index: 1;
+        }
+        
+        .status-step:last-child::before {
+            display: none;
+        }
+
+        .status-dot {
+            width: 24px;
+            height: 24px;
+            background-color: #ddd;
+            border-radius: 50%;
+            margin: 0 auto 10px auto;
+            border: 4px solid var(--light-bg);
+            position: relative;
+            z-index: 2;
+            transition: background-color 0.5s;
+        }
+        
+        .status-label {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #aaa;
+            transition: color 0.5s;
+        }
+
+        /* Active/Completed States */
+        .status-step.completed .status-dot,
+        .status-step.active .status-dot {
+            background-color: var(--success-green);
+        }
+        
+        .status-step.completed .status-label,
+        .status-step.active .status-label {
+            color: var(--text-dark);
+        }
+        
+        .status-step.completed::before {
+            background-color: var(--success-green);
+        }
+        
+        .status-step.active .status-dot {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
+        }
+
+        /* --- About Section --- */
+        .about {
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .about .container {
+            max-width: 800px;
+        }
+        
+        .about p {
+            font-size: 1.1rem;
+            color: #444;
+        }
+
+        /* --- Footer --- */
+        .footer {
+            background-color: var(--primary-dark);
+            color: var(--text-light);
+            text-align: center;
+            padding: 30px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>TilTN Towing and Transport</h1>
+    </header>
+
+    <main class="hero">
+        <div class="container">
+            <h2>Your Trusted Towing Service in Phoenix, AZ</h2>
+            <p class="subtitle">Fast, Reliable, and Professional. Call us anytime.</p>
+            <a href="tel:602-579-5145" class="cta-button">Tap to Call Now</a>
+            <p class="phone-number">602-579-5145</p>
+        </div>
+    </main>
+
+    <!-- Live Service Tracker Section -->
+    <section class="tracker">
+        <div class="container">
+            <h3>Live Service Tracker</h3>
+            <div class="tracker-container">
+                <div class="map-placeholder">
+                    <div class="eta-display">
+                        <p class="eta-label">Estimated Time of Arrival</p>
+                        <p class="eta-time" id="eta-time">14 MIN</p>
+                    </div>
+                </div>
+                <div class="status-tracker">
+                    <ul class="status-timeline" id="status-timeline">
+                        <li class="status-step completed" id="step1">
+                            <div class="status-dot"></div>
+                            <div class="status-label">Job Confirmed</div>
+                        </li>
+                        <li class="status-step active" id="step2">
+                            <div class="status-dot"></div>
+                            <div class="status-label">Driver En Route</div>
+                        </li>
+                        <li class="status-step" id="step3">
+                            <div class="status-dot"></div>
+                            <div class="status-label">Arrived</div>
+                        </li>
+                        <li class="status-step" id="step4">
+                            <div class="status-dot"></div>
+                            <div class="status-label">Service Complete</div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="about">
+        <div class="container">
+            <h3>Experience, Family, and Honor</h3>
+            <p>TilTN Towing and Transport was founded on three core principles: experience, family, and honor. With over 20 years in the industry, owner Theron Spotten provides expert towing and mechanical knowledge you can count on.</p>
+            <p>Working with his grandson Neo, Theron runs TilTN in loving memory of his son, Nathan Spotten. This company is their tribute—a commitment to serving the Phoenix community with the integrity and strength that defines their family. When you need help on the road, call the team that’s driven by a legacy of service.</p>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2025 TilTN Towing and Transport. All Rights Reserved.</p>
+    </footer>
+
+    <!-- Simulation JavaScript -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const etaElement = document.getElementById('eta-time');
+            const steps = [
+                document.getElementById('step1'),
+                document.getElementById('step2'),
+                document.getElementById('step3'),
+                document.getElementById('step4')
+            ];
+            let currentEta = 14;
+            let currentStep = 1;
+            function updateStatus(stepIndex) {
+                steps.forEach((step, index) => {
+                    step.classList.remove('active', 'completed');
+                    if (index < stepIndex) {
+                        step.classList.add('completed');
+                    } else if (index === stepIndex) {
+                        step.classList.add('active');
+                    }
+                });
+            }
+            const etaInterval = setInterval(() => {
+                if (currentEta > 1) {
+                    currentEta--;
+                    etaElement.textContent = `${currentEta} MIN`;
+                } else if (currentEta === 1) {
+                    etaElement.textContent = '<1 MIN';
+                    currentEta = 0;
+                }
+            }, 3000);
+            setTimeout(() => {
+                currentStep = 2;
+                updateStatus(currentStep);
+                etaElement.textContent = 'ARRIVED';
+                clearInterval(etaInterval);
+            }, 15000);
+            setTimeout(() => {
+                currentStep = 3;
+                updateStatus(currentStep);
+            }, 20000);
+            updateStatus(currentStep);
+        });
+    </script>
+</body>
+</htm
