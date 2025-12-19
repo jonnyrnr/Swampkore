@@ -1,0 +1,58 @@
+# Build directories
+build/
+Build/
+Builds/
+cmake-build-*/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile
+*.cmake
+
+# Xcode
+*.xcodeproj/
+*.xcworkspace/
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
+
+# JUCE
+JuceLibraryCode/
+
+# Compiled files
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.a
+*.lib
+*.au
+*.vst3
+*.component
+
+# Debug files
+*.dSYM/
+*.pdb
+*.ilk
+
+# Temporary files
+tmp/
+temp/
+*.tmp
