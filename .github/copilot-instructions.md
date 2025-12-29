@@ -28,10 +28,9 @@ KORE SWAMP is a professional C++/JUCE-based AUv3 mobile workstation designed spe
 
 ### Prerequisites
 ```bash
-# Install JUCE (if not already installed)
-brew install juce
-# OR clone from GitHub
+# Clone JUCE from GitHub (recommended)
 git clone https://github.com/juce-framework/JUCE.git
+# OR download from https://juce.com/
 ```
 
 ### Building for iOS/AUv3
